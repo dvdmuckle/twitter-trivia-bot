@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type Trivia []struct {
+type Trivia struct {
 	Airdate  time.Time `json:"airdate"`
 	Answer   string    `json:"answer"`
 	Category struct {
@@ -29,40 +29,25 @@ type Trivia []struct {
 }
 
 var getClient = &http.Client{Timeout: 10 * time.Second}
-var url string = "http://www.jservice.io/api/random"
+var url string = "http://www.jservice.io/api/random?count=10"
 
-func Jget() ([]byte, error) {
+func Jget(jfill interface{}) error {
 	res, err := getClient.Get(url)
 	if err != nil {
-		return nil, err
-	}
-	body, err := ioutil.ReadAll(res.Body)
-
-	if err != nil {
-		return nil, err
+		fmt.Println(err)
+		return err
 	}
 	defer res.Body.Close()
-	return body, nil
-}
-
-func Jparse(body []byte) (*Trivia, error) {
-	var t = new(Trivia)
-	err := json.Unmarshal(body, &t)
+	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, err
+		fmt.Println(err)
+		return err
 	}
-	return t, err
+	return json.Unmarshal(body, jfill)
 }
 
 func main() {
-	res, err := Jget()
-	if err != nil {
-		fmt.Println(err)
-	}
-	NewTriv, err := Jparse(res)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(NewTriv.Question)
-
+	Jfill := []Trivia{}
+	Jget(&Jfill)
+	fmt.Printf("Under \"%s\": %s.\n", Jfill[0].Category.Title, Jfill[0].Question)
 }
