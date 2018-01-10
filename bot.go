@@ -1,53 +1,30 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"github.com/dghubble/go-twitter/twitter"
+	"github.com/dghubble/oauth1"
 	"net/http"
-	"time"
+	"os"
 )
 
-type Trivia struct {
-	Airdate  time.Time `json:"airdate"`
-	Answer   string    `json:"answer"`
-	Category struct {
-		CluesCount int       `json:"clues_count"`
-		CreatedAt  time.Time `json:"created_at"`
-		ID         int       `json:"id"`
-		Title      string    `json:"title"`
-		UpdatedAt  time.Time `json:"updated_at"`
-	} `json:"category"`
-	CategoryID   int         `json:"category_id"`
-	CreatedAt    time.Time   `json:"created_at"`
-	GameID       interface{} `json:"game_id"`
-	ID           int         `json:"id"`
-	InvalidCount interface{} `json:"invalid_count"`
-	Question     string      `json:"question"`
-	UpdatedAt    time.Time   `json:"updated_at"`
-	Value        int         `json:"value"`
+var httpClient http.Client
+var client *twitter.Client
+
+func Config() {
+	config := oauth1.NewConfig(os.Getenv("CONSUMERKEY"), os.Getenv("CONSUMERSECRET"))
+	token := oauth1.NewToken(os.Getenv("ACCESSTOKEN"), os.Getenv("ACCESSSECRET"))
+	httpClient := config.Client(oauth1.NoContext, token)
+	client = twitter.NewClient(httpClient)
+	fmt.Println(os.Getenv("CONSUMERKEY"))
+	fmt.Println(os.Getenv("CONSUMERSECRET"))
+	fmt.Println(os.Getenv("ACCESSTOKEN"))
+	fmt.Println(os.Getenv("ACCESSSECRET"))
 }
-
-var getClient = &http.Client{Timeout: 10 * time.Second}
-var url string = "http://www.jservice.io/api/random?count=10"
-
-func Jget(jfill interface{}) error {
-	res, err := getClient.Get(url)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	return json.Unmarshal(body, jfill)
+func CreateThread() {
+	client.Statuses.Update("This is another test!", nil)
 }
-
 func main() {
-	Jfill := []Trivia{}
-	Jget(&Jfill)
-	fmt.Printf("Under \"%s\": %s.\n", Jfill[0].Category.Title, Jfill[0].Question)
+	Config()
+	CreateThread()
 }
