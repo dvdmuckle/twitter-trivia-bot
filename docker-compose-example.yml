@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+
+  twitter:
+    image: dvdmuckle/twitter-trivia-bot
+    environment:
+            ACCESSSECRET: "Pur access secret here"
+            ACCESSTOKEN: "Put access token here"
+            CONSUMERKEY: "Put consumer key here"
+            CONSUMERSECRET: "Put consumer secret here"

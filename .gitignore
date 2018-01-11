@@ -3,4 +3,5 @@
 !*.md
 !*.go
 !*.yml
+docker-compose.yml
 !Dockerfile
