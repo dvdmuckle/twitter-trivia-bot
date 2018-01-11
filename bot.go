@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
-	"gopkg.in/robfig/cron.v2"
+	"github.com/jasonlvhit/gocron"
 	"net/http"
 	"os"
 	"time"
@@ -59,24 +59,6 @@ func TweetThread() error {
 }
 func main() {
 	Config()
-	c := cron.New()
-	c.AddFunc("0 0 8 * * *", func() {
-		question, answer, err := GetQ()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		tweetid, err := TweetQuestion(question)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		time.Sleep(10 * time.Hour)
-		err = TweetAnswer(answer, tweetid)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-	})
-	c.Start()
+	gocron.Every(1).Day().At("10:00").Do(TweetThread)
+	<-gocron.Start()
 }
