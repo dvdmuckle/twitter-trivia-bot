@@ -59,6 +59,6 @@ func TweetThread() error {
 }
 func main() {
 	Config()
-	gocron.Every(1).Day().At("10:00").Do(TweetThread)
+	gocron.Every(1).Day().At("15:00").Do(TweetThread)
 	<-gocron.Start()
 }
