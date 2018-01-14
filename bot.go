@@ -50,7 +50,7 @@ func TweetThread() error {
 		fmt.Println(err)
 		return err
 	}
-	time.Sleep(10 * time.Hour)
+	time.Sleep(8 * time.Hour)
 	err = TweetAnswer(answer, tweetid)
 	if err != nil {
 		fmt.Println(err)
