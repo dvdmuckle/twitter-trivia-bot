@@ -25,7 +25,7 @@ func TweetQuestion(question string) (int64, error) {
 		fmt.Println(err)
 		return 0, err
 	}
-	fmt.Println("Sent question %s at %s", question, time.Now())
+	fmt.Printf("Sent question %s at %s\n", question, time.Now())
 	return tweet.ID, nil
 }
 func TweetAnswer(answer string, tweetid int64) error {
@@ -36,7 +36,7 @@ func TweetAnswer(answer string, tweetid int64) error {
 		fmt.Println(err)
 		return err
 	}
-	fmt.Println("Sent answer %s at %s", answer, time.Now())
+	fmt.Printf("Sent answer %s at %s\n", answer, time.Now())
 	return nil
 }
 func TweetThread() error {
