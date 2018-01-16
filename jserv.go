@@ -48,11 +48,17 @@ func Jget(jfill interface{}) error {
 }
 
 func GetQ() (string, string, error) {
+	isValid := false
 	Jfill := []Trivia{}
-	err := Jget(&Jfill)
-	if err != nil {
-		fmt.Println(err)
-		return "", "", err
+	for !isValid {
+		err := Jget(&Jfill)
+		if err != nil {
+			fmt.Println(err)
+			return "", "", err
+		}
+		if Jfill[0].InvalidCount == nil {
+			isValid = true
+		}
 	}
 	return fmt.Sprintf("Under \"%s\": %s.", Jfill[0].Category.Title, Jfill[0].Question), fmt.Sprintf("The answer? %s.", Jfill[0].Answer), nil
 }
